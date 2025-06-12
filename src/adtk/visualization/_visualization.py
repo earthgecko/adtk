@@ -209,7 +209,12 @@ def plot(
 
     """
     # setup style
-    plt.style.use("seaborn-whitegrid")
+
+# @modified 20250612 - Task #5631: Replace deprecated seaborn-whitegrid
+# https://github.com/arundo/adtk/issues/152
+# https://github.com/arundo/adtk/pull/156
+#    plt.style.use("seaborn-whitegrid")
+    plt.style.use('seaborn-v0_8-whitegrid')
 
     # initialize color generator
     color_generator = ColorGenerator()
@@ -343,9 +348,9 @@ def plot(
     # title
     if title != "":
         try:
-            plt.suptitle(title, fontsize=12)
+            plt.suptitle(title, fontsize=10)
         except Exception as e:
-            print("could not add title to plot - {}".format(e))
+            print("could not add title to plot - %s" % e)
 
     # save_to_file
     save_to_file_path = None
@@ -353,27 +358,23 @@ def plot(
         try:
             save_to_file_path = os.path.dirname(save_to_file)
         except Exception as e:
-            print(
-                "{} not a valid path/filename for "
-                "save_to_file - %s".format(save_to_file, e))
-
+            print("%s not a valid path/filename for save_to_file - %s" % (
+                str(save_to_file), e))
     save_to_file_path_exists = False
     if save_to_file_path:
         try:
             if os.path.exists(save_to_file_path):
                 save_to_file_path_exists = True
         except Exception as e:
-            print(
-                "{} is not a valid path in "
-                "save_to_file - {}".format(save_to_file, e))
+            print("%s is not a valid path in save_to_file - %s" % (
+                str(save_to_file), e))
     if save_to_file_path_exists:
         try:
             plt.savefig(save_to_file, dpi=100)
             os.chmod(save_to_file, mode=0o644)
         except Exception as e:
-            print(
-                "error: failed to save plot to "
-                "%s - %s".format(save_to_file, e))
+            print("error: failed to save plot to %s - %s" % (
+                str(save_to_file), e))
 
     return axes
 
